@@ -1,0 +1,63 @@
+drop table if exists papers1;
+create table papers1(Pi int, Pj int)
+ROW FORMAT SERDE
+'org.apache.hadoop.hive.serde2.RegexSerDe' WITH SERDEPROPERTIES ("input.regex" = "([0-9]+)*+\\s+([0-9]+)*");
+
+
+load data local inpath '/home/administrator/link.txt' into table papers1;
+
+select * from papers1
+limit 100;
+
+drop view if exists count2;
+create view count2 As
+select Pi, count(Pi) as outcountPi
+from papers1
+where Pj is NOT NULL
+group by Pi;
+
+drop view if exists count3;
+create view count3 As
+select Pj, count(Pj) as incountPj
+from papers1
+where Pj is NOT NULL
+group by Pj;
+
+drop table if exists table1;
+create table table1(P1 int, outP1 int, inP1 int);
+insert into table1
+select a.Pi, a.outcountPi, b.incountPj
+from count2 as a,count3 as b
+where a.Pi = b.Pj;
+
+drop table if exists details;
+create table details(Pi int,Pj int,outPj int,inPj int);
+
+insert into details
+select a.Pi ,a.Pj ,b.outP1,b.inP1
+from papers1 as a join table1 as b
+on (b.P1=a.Pj);
+
+drop table if exists total;
+create table total (Pi int,totout int, totin int);
+insert into total
+select Pi, sum(outPj), sum(inPj)
+from details
+group by Pi;
+
+drop table if exists final;
+create table final (Pi int,Pj int, totout int, totin int,outPj int,inPj int);
+
+insert into final
+select a.Pi,a.Pj, b.totout, b.totin, a.outPj, a.inPj
+from details as a join total as b
+on(a.Pi=b.Pi);
+
+drop table if exists wt;
+create table wt( Pi int, Pj int, Win double, Wout double);
+insert into wt
+select Pi, Pj, inPj/totin as Win, OutPj/totout as Wout
+from final;
+
+drop view if exists counts;
+create view counts as select (1/(count(distinct Pi))) as count1 from papers1;

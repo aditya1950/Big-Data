@@ -1,0 +1,10 @@
+Distinctive Image Features from Scale-Invariant Keypoints.	2785	5.223067206044781E21
+Data Clustering: A Review.	1260	4.4133004935853684E20
+A Tutorial on Support Vector Machines for Pattern Recognition.	1358	1.413208307408757E20
+A Method for Obtaining Digital Signatures and Public-Key Cryptosystems.	1724	7.196594919490348E18
+Graph-Based Algorithms for Boolean Function Manipulation.	1722	5.6002316476651407E18
+A Theory for Multiresolution Signal Decomposition: The Wavelet Representation.	929	4.2481219284045921E18
+Content-Based Image Retrieval at the End of the Early Years.	939	3.7022135494130007E18
+Wireless sensor networks: a survey.	1059	2.8420699039744394E18
+Fast Algorithms for Mining Association Rules in Large Databases.	2678	2.581005175470057E18
+Scheduling Algorithms for Multiprogramming in a Hard-Real-Time Environment.	1260	2.4684528150321823E18

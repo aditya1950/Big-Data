@@ -1,0 +1,268 @@
+Page Rank
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Iteration0
+
+select count(distinct Pi) from papers1;
+
+
+//COUNT N
+drop table if exists counts1;
+create table counts1(count1 double);
+insert into counts1
+select count(distinct Pi) as count1 from papers1;
+
+//PAGE RANK
+drop table if exists pr0;
+create table pr0(Pj int, Pr double);
+insert into pr0
+select w.Pj ,(0.15/count1)+0.85*sum(1/count1*w.Win*w.Wout)
+from wt as w, counts1
+group by w.Pj, count1;
+
+
+//It JOIN for new Page rank
+drop table if exists it0;
+create table it0(Pi int, Pj int, pr float, Win float, Wout float);
+insert into it0
+select w.Pi, w.Pj, p.Pr, w.Win, w.Wout
+from wt as w JOIN pr0 as p
+on w.Pj = p.Pj;
+
+select * from it0
+limit 10;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Iteration1
+
+//PAGE RANK
+drop table if exists pr1;
+create table pr1(Pj int, Pr double);
+insert into pr1
+select w.Pj ,(0.15/count1)+0.85*sum(pr*w.Win*w.Wout)
+from it0 as w, counts1
+group by w.Pj, count1;
+
+
+//It JOIN for new Page rank
+drop table if exists it1;
+create table it1(Pi int, Pj int, pr float, Win float, Wout float);
+insert into it1
+select w.Pi, w.Pj, p.Pr, w.Win, w.Wout
+from it0 as w JOIN pr1 as p
+on w.Pj = p.Pj;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Iteration2
+
+
+//PAGE RANK
+drop table if exists pr2;
+create table pr2(Pj int, Pr double);
+insert into pr2
+select w.Pj ,(0.15/count1)+0.85*sum(pr*w.Win*w.Wout)
+from it1 as w, counts1
+group by w.Pj, count1;
+
+
+//It JOIN for new Page rank
+drop table if exists it2;
+create table it2(Pi int, Pj int, pr float, Win float, Wout float);
+insert into it2
+select w.Pi, w.Pj, p.Pr, w.Win, w.Wout
+from it1 as w JOIN pr2 as p
+on w.Pj = p.Pj;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Iteration3
+
+
+//PAGE RANK
+drop table if exists pr3;
+create table pr3(Pj int, Pr double);
+insert into pr3
+select w.Pj ,(0.15/count1)+0.85*sum(pr*w.Win*w.Wout)
+from it2 as w, counts1
+group by w.Pj, count1;
+
+
+//It JOIN for new Page rank
+drop table if exists it3;
+create table it3(Pi int, Pj int, pr float, Win float, Wout float);
+insert into it3
+select w.Pi, w.Pj, p.Pr, w.Win, w.Wout
+from it2 as w JOIN pr3 as p
+on w.Pj = p.Pj;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Iteration4
+
+
+//PAGE RANK
+drop table if exists pr4;
+create table pr4(Pj int, Pr double);
+insert into pr4
+select w.Pj ,(0.15/count1)+0.85*sum(pr*w.Win*w.Wout)
+from it3 as w, counts1
+group by w.Pj, count1;
+
+
+//It JOIN for new Page rank
+drop table if exists it4;
+create table it4(Pi int, Pj int, pr float, Win float, Wout float);
+insert into it4
+select w.Pi, w.Pj, p.Pr, w.Win, w.Wout
+from it3 as w JOIN pr4 as p
+on w.Pj = p.Pj;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Iteration5
+
+
+//PAGE RANK
+drop table if exists pr5;
+create table pr5(Pj int, Pr double);
+insert into pr5
+select w.Pj ,(0.15/count1)+0.85*sum(pr*w.Win*w.Wout)
+from it4 as w, counts1
+group by w.Pj, count1;
+
+
+//It JOIN for new Page rank
+drop table if exists it5;
+create table it5(Pi int, Pj int, pr float, Win float, Wout float);
+insert into it5
+select w.Pi, w.Pj, p.Pr, w.Win, w.Wout
+from it4 as w JOIN pr5 as p
+on w.Pj = p.Pj;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Iteration6
+
+
+//PAGE RANK
+drop table if exists pr6;
+create table pr6(Pj int, Pr double);
+insert into pr6
+select w.Pj ,(0.15/count1)+0.85*sum(pr*w.Win*w.Wout)
+from it5 as w, counts1
+group by w.Pj, count1;
+
+
+//It JOIN for new Page rank
+drop table if exists it6;
+create table it6(Pi int, Pj int, pr float, Win float, Wout float);
+insert into it6
+select w.Pi, w.Pj, p.Pr, w.Win, w.Wout
+from it5 as w JOIN pr6 as p
+on w.Pj = p.Pj;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Iteration7
+
+
+//PAGE RANK
+drop table if exists pr7;
+create table pr7(Pj int, Pr double);
+insert into pr7
+select w.Pj ,(0.15/count1)+0.85*sum(pr*w.Win*w.Wout)
+from it6 as w, counts1
+group by w.Pj, count1;
+
+
+//It JOIN for new Page rank
+drop table if exists it7;
+create table it7(Pi int, Pj int, pr float, Win float, Wout float);
+insert into it7
+select w.Pi, w.Pj, p.Pr, w.Win, w.Wout
+from it6 as w JOIN pr7 as p
+on w.Pj = p.Pj;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Iteration8
+
+
+//PAGE RANK
+drop table if exists pr8;
+create table pr8(Pj int, Pr double);
+insert into pr8
+select w.Pj ,(0.15/count1)+0.85*sum(pr*w.Win*w.Wout)
+from it7 as w, counts1
+group by w.Pj, count1;
+
+
+//It JOIN for new Page rank
+drop table if exists it8;
+create table it8(Pi int, Pj int, pr float, Win float, Wout float);
+insert into it8
+select w.Pi, w.Pj, p.Pr, w.Win, w.Wout
+from it7 as w JOIN pr8 as p
+on w.Pj = p.Pj;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Iteration9
+
+
+//PAGE RANK
+drop table if exists pr9;
+create table pr9(Pj int, Pr double);
+insert into pr9
+select w.Pj ,(0.15/count1)+0.85*sum(pr*w.Win*w.Wout)
+from it8 as w, counts1
+group by w.Pj, count1;
+
+
+//It JOIN for new Page rank
+drop table if exists it9;
+create table it9(Pi int, Pj int, pr float, Win float, Wout float);
+insert into it9
+select w.Pi, w.Pj, p.Pr, w.Win, w.Wout
+from it8 as w JOIN pr9 as p
+on w.Pj = p.Pj;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+drop table if exists finalop;
+create table finalop(Pj int, countPj int, Pr double);
+insert into finalop
+select t.Pj, t.incountPj,p.Pr from pr9 as p JOIN count3 as t
+on t.Pj = p.Pj;
+
+drop table if exists finalpr;
+create table finalpr(Pj int, countPj int, Pr double);
+insert into finalpr
+select * from finalop
+order by Pr desc
+limit 10;
+
+
+drop table if exists last;
+create table last(Pi int, title string)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t';
+ROW FORMAT SERDE
+'org.apache.hadoop.hive.serde2.RegexSerDe' WITH SERDEPROPERTIES ("input.regex" = "([^ ])*+\\s+([^ ])*");
+
+load data local inpath '/home/administrator/title.txt' into table last;
+
+
+drop table if exists ranks;
+create table ranks(Paper_title string, citations int, pagerank double)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t';
+
+insert into ranks
+select title, countPj, Pr from last as l,finalpr as f
+where l.Pi = f.Pj
+order by Pr desc;
+
+INSERT OVERWRITE LOCAL DIRECTORY '/home/administrator/paper_rank.txt'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+select * from ranks;
+
+
+
+
+
